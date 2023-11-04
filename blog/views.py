@@ -40,7 +40,7 @@ class SigninView(APIView):
     def post(self, request):
         user = authenticate(username=request.data['id'], password=request.data['password'])
         if user is not None:
-            token = Token.objects.get(user=user)
+            token, created = Token.objects.get_or_create(user=user)
             return Response({"Success" : True, 'Result' : {'Token' : token.key}})
         else:
             return Response({"Success" : False, 'Result' : {}},status=401)
